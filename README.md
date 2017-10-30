@@ -1,3 +1,3 @@
-Customised Angular JS boilerplate
+Frontier
 
-- AngularJS, Sass Compass, Gulp
+Game for Interaction Design 2
