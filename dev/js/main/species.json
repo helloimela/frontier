@@ -1,0 +1,18 @@
+[
+	{
+		"id":0,
+		"name":"Space Ulk",
+		"class":"Amphibia",
+		"type":"Herbivore",
+		"habitat":"Sea",
+		"stats":[
+			{
+				"land":"",
+				"population":"",
+				"energy":"",
+				"food":"",
+				"influence":""
+			}
+		]
+	}
+]
