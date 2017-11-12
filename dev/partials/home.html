@@ -1,10 +1,12 @@
 <h5>Start the game?</h5>
 <a href="" ng-click="go('/species')" class="btn btn-success">Yes</a>
 <a href="" class="btn btn-success">No</a>
-<form ng-submit="sendMessage()">
-	<input ng-model="messageContent" type="text" placeholder="Type your message" />
-	<input type="submit" value="Send"/>
-</form>
+<div ng-controller="ChatCtrl">
+	<form ng-submit="sendMessage()">
+		<input ng-model="messageContent" type="text" placeholder="Type your message" />
+		<button type="submit">Send</button>
+	</form>
+</div>
 <ul>
      <li ng-repeat="message in messages">
        <span class="title">Anonymous robot #{{ message.sender_uuid }}</span>

@@ -25,24 +25,26 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
   });
 }]);*/
 
-app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location','$rootScope','$window',function(Pubnub,Page,$sce,$http, $scope, $location, $rootScope, $window){
+app.controller('MainCtrl', ['Page','$sce','$http','$scope','$location','$rootScope','$window',function(Page,$sce,$http, $scope, $location, $rootScope, $window){
   $scope.Page = Page;
 
 	$scope.go = function ( path ) {
 	  $location.path( path );
 	};
+}]);
 
-  $scope.channel = 'game-channel';
+
+app.controller('ChatCtrl', ['Pubnub','Page','$http','$location','$scope',function(Pubnub,Page,$http, $location, $scope, $rootScope){
+ $scope.channel = 'game-channel';
   $scope.uuid = Math.random(100).toString();
   Pubnub.init({
-   publish_key: 'sub-c-33a57daa-c3a7-11e7-b683-b67c7dbcdd00',
-   subscribe_key: 'pub-c-445d8ace-41a9-40d2-b68c-bdfcc1e2a298',
+   publish_key: 'pub-c-445d8ace-41a9-40d2-b68c-bdfcc1e2a298',
+   subscribe_key: 'sub-c-33a57daa-c3a7-11e7-b683-b67c7dbcdd00',
    uuid: $scope.uuid
   });
      // Send the messages over PubNub Network
   $scope.sendMessage = function() {
      // Don't send an empty message 
-    console.log('SendMessage');
      if (!$scope.messageContent || $scope.messageContent === '') {
           return;
       }
@@ -76,7 +78,6 @@ app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location',
           $scope.messages.push(m);
       });
   });
-
 }]);
 
 app.controller('HomeCtrl', ['Page','$http','$location','$scope',function(Page,$http, $location, $scope, $rootScope){
