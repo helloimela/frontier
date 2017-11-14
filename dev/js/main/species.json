@@ -14,5 +14,20 @@
 				"influence":""
 			}
 		]
+	},{
+		"id":1,
+		"name":"Space Feline",
+		"class":"Mammals",
+		"type":"Carnivore",
+		"habitat":"Land",
+		"stats":[
+			{
+				"land":"",
+				"population":"",
+				"energy":"",
+				"food":"",
+				"influence":""
+			}
+		]
 	}
 ]
