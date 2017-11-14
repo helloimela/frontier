@@ -1,2 +1,11 @@
-<span>Number: </span>
-<span ng-bind="number"></span>
+<div class="rows">
+	<div class="col-sm-12">
+		<p ng-if="presences.occupancy>0">{{presences.occupancy}} players:</p>
+		<ul>
+			<li ng-repeat="message in messages">
+			  <span class="title">Anonymous robot #{{ message.sender_uuid }}</span>
+			  <p>Species : {{message.speciesId}}</p>
+			</li>
+		</ul>
+	</div>
+</div>
