@@ -1,5 +1,5 @@
 var app = angular.module('frontier', [
-  'ngRoute', 'ngAnimate', 'ngSanitize','pubnub.angular.service'
+  'ngRoute', 'ngAnimate', 'ngSanitize','pubnub.angular.service','firebase'
 ]);
 
 app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
@@ -28,8 +28,12 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
   });
 }]);*/
 
-app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location','$rootScope','$window',function(Pubnub,Page,$sce,$http, $scope, $location, $rootScope, $window){
+app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location','$rootScope','$window','$firebase',function(Pubnub,Page,$sce,$http, $scope, $location, $rootScope, $window,$firebase){
   $scope.Page = Page;
+
+  // var ref = new Firebase("https://frontier-a3fcb.firebaseio.com");  
+  // var fb = $firebase(ref);
+ 
 
 	$scope.go = function ( path ) {
 	  $location.path( path );
@@ -50,45 +54,45 @@ app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location',
       channel: $scope.channel,
       triggerEvents: ['callback'],
       presence:function(m){
-        console.log(m);
+        // console.log(m);
         $rootScope.presences=m;
       }
   });
 
   $scope.sendMessage =  function(){
-
-    Pubnub.publish({
-          channel: $scope.channel,
-          message: {
-              speciesId:$rootScope.userID,
-              sender_uuid: $scope.uuid
-          },
-          callback: function(m) {
-            console.log(m);
-          }
-      });
+    $scope.publish(0);
+    console.log('SendMessage');
+    console.log($rootScope.messages);
     $location.path('/species/'+$scope.userID);
   };
 
   $scope.$on(Pubnub.getPresenceEventNameFor($scope.channel),function(e,payload){
-    console.log(e);   
-    console.log(payload);   
+    // console.log(e);   
+    // console.log(payload);   
   });
 
   // Listening to the callbacks
   $scope.$on(Pubnub.getMessageEventNameFor($scope.channel), function (ngEvent, m) {
       $scope.$apply(function () {
           $rootScope.messages.push(m);
-          console.log(ngEvent);
-          console.log(m);
+          // console.log(ngEvent);
+          // console.log(m);
       });
   });
 
   $scope.sendReady = function(){
+    $scope.publish(1);
+    console.log('SendReady');
+    console.log($rootScope.messages);
+  };
+
+  $scope.publish = function(n){
     Pubnub.publish({
           channel: $scope.channel,
           message: {
-              ready:1
+              speciesId:$rootScope.userID,
+              readyState:n,
+              sender_uuid: $scope.uuid
           },
           callback: function(m) {
             // console.log(m);
