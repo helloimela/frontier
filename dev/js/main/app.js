@@ -8,7 +8,7 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
     .when("/", {templateUrl: "partials/home.html", controller: "HomeCtrl"})
     .when("/1", {templateUrl: "partials/home1.html", controller: "HomeCtrl"})
     .when("/playernew/:playerId", {templateUrl: "partials/views/newplayer.html", controller: "NewplayerCtrl"})
-    .when("/motion", {templateUrl: "partials/views/motion.html", controller: "MotionCtrl"})
+    .when("/motion/:turnId", {templateUrl: "partials/views/motion.html", controller: "MotionCtrl"})
     .when("/sharedScreen", {templateUrl: "partials/views/sharedScreen.html", controller: "MotionCtrl"})
     .when("/species/:speciesId", {templateUrl: "partials/views/species.html", controller: "SpeciesCtrl"});
     // Pages
@@ -101,6 +101,12 @@ app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location',
       });
   };
 
+  $scope.counter = 0;
+  $scope.goVote = function(){
+    $scope.counter+=1;
+    $location.path('/motion/'+$scope.counter);
+  }
+
 }]);
 
 
@@ -158,10 +164,30 @@ app.controller('SpeciesCtrl', ['Page','$routeParams','$http','$location','$scope
 app.controller('MotionCtrl', ['Vote','Page','$rootScope','$routeParams','$http','$location','$scope',function(Vote,Page,$rootScope,$routeParams, $http, $location, $scope){
   Page.setTitle('Motions');
 
+  if($routeParams.turnId==1){
+    $scope.x=1;
+    $scope.y=3;
+  } else if($routeParams.turnId==2){
+    $scope.x=2;
+    $scope.y=5;
+  } else if($routeParams.turnId==3){
+    $scope.x=4;
+    $scope.y=6;
+  } else if($routeParams.turnId==4){
+    $scope.x=1;
+    $scope.y=5;
+  } else if($routeParams.turnId==5){
+    $scope.x=2;
+    $scope.y=6;
+  }
+
   $http.get('js/main/motions.json').then(function(data){
-      $scope.itemDetail = data.data[1];
-      $scope.effects = data.data[1].effects[0];
-      console.log($scope.effects);
+      $scope.itemDetail = data.data[$scope.x];
+      $scope.effects = data.data[$scope.x].effects[0];
+      
+      $scope.itemDetail2 = data.data[$scope.y];
+      $scope.effects2 = data.data[$scope.y].effects[0];
+       
   });
   $scope.submitMotion = function(){
     console.log($scope.influence);
@@ -171,6 +197,7 @@ app.controller('MotionCtrl', ['Vote','Page','$rootScope','$routeParams','$http',
   });
 
   $scope.count = 0;
+  $scope.count2 = 0;
 }]);
 
 app.directive('nav', ['$location',function($location){

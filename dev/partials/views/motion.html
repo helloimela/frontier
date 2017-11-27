@@ -1,28 +1,61 @@
-<ng-repeat
-<div class="col-xs-6 col-sm-3"><strong>Motion:</strong> 
-		<ul>
-			<li>Topic: {{itemDetail.topic}}</li>
-			<li>Type: {{itemDetail.type}}</li>
-		</ul>
-</div>
-<div><strong>Effects:</strong> 
-		<ul>
-			<li>Land: {{effects.land}}</li>
-			<li>Population: {{effects.population}}</li>
-			<li>Energy: {{effects.energy}}</li>
-			<li>Food: {{effects.food}}</li>
-		</ul>
-</div>
-<div >
-	<strong>Influence Spent:</strong>
-	<br>
-	<button ng-click="count = count + 1">+</button>
-	<p>{{ count }}</p>
-	<button ng-click="count = count - 1">-</button>
-</div>
-<strong>Influence Required: {{effects.influence_required}}</strong>
+<div class="box-container flex-container">
+	<div class="box col-100">
+		<div class="flex-container flex-0 influence-box">
+			<div class="flex-2"></div>
+			<div class="box flex-3 inside-box">Influence</div>
+			<div class="flex-1"></div>
+		</div>	
 
-<form ng-submit="submitMotion()">
+		<div class="flex-container flex-0 prop-box">
+			<div class="box flex-5 inside-box inside-no-corner">
+				<p>Motion 1</p>
+				<ul>
+					<li>Topic: {{itemDetail.topic}}</li>
+					<li>Type: {{itemDetail.type}}</li>
+				</ul>
+				<ul>
+					<li ng-hide="effects.land==0">Land: {{effects.land}}</li>
+					<li ng-hide="effects.population==0">Population: {{effects.population}}</li>
+					<li ng-hide="effects.energy==0">Energy: {{effects.energy}}</li>
+					<li ng-hide="effects.food==0">Food: {{effects.food}}</li>
+				</ul>
+				<strong>Influence Required: {{effects.influence_required}}</strong>
+			</div>
+			<div class="flex-1">
+				<button ng-click="count = count + 1">+</button>
+				<p>{{ count }}</p>
+				<button ng-click="count = count - 1">-</button>
+			</div>
+		</div>
+		<div class="flex-container flex-0 prop-box">
+			<div class="box flex-5 inside-box inside-no-corner">
+				<p>Motion 1</p>
+				<ul>
+					<li>Topic: {{itemDetail2.topic}}</li>
+					<li>Type: {{itemDetail2.type}}</li>
+				</ul>
+				<ul>
+					<li ng-hide="effects2.land==0">Land: {{effects2.land}}</li>
+					<li ng-hide="effects2.population==0">Population: {{effects2.population}}</li>
+					<li ng-hide="effects2.energy==0">Energy: {{effects2.energy}}</li>
+					<li ng-hide="effects2.food==0">Food: {{effects2.food}}</li>
+				</ul>
+				<strong>Influence Required: {{effects2.influence_required}}</strong>
+			</div>
+			<div class="flex-1">
+				<button ng-click="count = count + 1">+</button>
+				<p>{{ count2 }}</p>
+				<button ng-click="count = count - 1">-</button>
+			</div>
+		</div>
+	</div>
+</div>
 
-	<input type="submit" value="Send" />
-</form>
+<div class="box-container flex-container">
+	<div class="box flex-container-center flex-1">
+		<form ng-submit="submitMotion()">
+
+			<input type="submit" value="Send" class="btn-main"/>
+		</form>
+	</div>
+</div>
