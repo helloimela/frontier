@@ -6,7 +6,8 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
   $routeProvider
     // Home
     .when("/", {templateUrl: "partials/home.html", controller: "HomeCtrl"})
-    .when("/playernew", {templateUrl: "partials/views/newplayer.html", controller: "NewplayerCtrl"})
+    .when("/1", {templateUrl: "partials/home1.html", controller: "HomeCtrl"})
+    .when("/playernew/:playerId", {templateUrl: "partials/views/newplayer.html", controller: "NewplayerCtrl"})
     .when("/motion", {templateUrl: "partials/views/motion.html", controller: "MotionCtrl"})
     .when("/sharedScreen", {templateUrl: "partials/views/sharedScreen.html", controller: "MotionCtrl"})
     .when("/species/:speciesId", {templateUrl: "partials/views/species.html", controller: "SpeciesCtrl"});
@@ -128,9 +129,9 @@ app.controller('HomeCtrl', ['Page','$http','$location','$scope','$rootScope',fun
   Page.setTitle('Frontier - A Planet of a Thousand Footprints');
 }]);
 
-app.controller('NewplayerCtrl', ['Page','$timeout','$http','$location','$scope','$rootScope',function(Page,$timeout,$http, $location, $scope, $rootScope){
+app.controller('NewplayerCtrl', ['Page','$timeout','$http','$location','$scope','$rootScope','$routeParams',function(Page,$timeout,$http, $location, $scope, $rootScope,$routeParams){
   Page.setTitle('Who are you?');
-  $rootScope.userID = Math.floor(Math.random() * 2) + 0;
+  $rootScope.userID = $routeParams.playerId;
   $scope.words = 'In the process of creating an awesome species ...';
   $timeout( function(){
     if($rootScope.userID==0){
@@ -159,7 +160,7 @@ app.controller('MotionCtrl', ['Vote','Page','$rootScope','$routeParams','$http',
 
   $http.get('js/main/motions.json').then(function(data){
       $scope.itemDetail = data.data[1];
-      $scope.effects = data.data[1].effects;
+      $scope.effects = data.data[1].effects[0];
       console.log($scope.effects);
   });
   $scope.submitMotion = function(){
