@@ -68,8 +68,11 @@
 
 html,body, body>div, .container{
 	height: 100%;
-	color: $gray-dark;
+	color: $gray-lighter;
 	position: relative;
+}
+body{
+	background-color: $body-bg;
 }
 body>div{
 	@media (max-width: $screen-sm-min) {
@@ -80,5 +83,111 @@ a{
 	cursor: pointer;
 	&:hover{text-decoration: none;}
 }
+
+.box-outside{
+	background:#00d7e6;
+	position:relative;
+	.border{
+		position:absolute;
+		background:#1e91c6;
+		&.left, &.right{
+			top:2%;
+			height: 96%;
+			width:5px;
+		}
+		&.left{left: -5px;}
+		&.right{right: -5px;}
+		&.top, &.bottom{
+			left:1%;
+			width: 98%;
+			height:5px;
+		}
+		&.top{top: -5px;}
+		&.bottom{bottom: -5px;}
+	}
+}
+
+.box-container{
+	flex-direction:row;
+	width: 100%;
+	margin-bottom:11px;
+}
+.flex-container{
+	display: flex;
+	display: -webkit-flex;
+}
+.flex-0{
+	-webkit-flex: 0 0 auto;
+	    flex: 0 0 auto;
+	    width: 100%;
+}
+.flex-1{
+	-webkit-flex: 1;
+	    flex: 1;
+}
+.flex-2{
+	-webkit-flex: 2;
+            flex: 2;
+}
+.flex-3{
+	-webkit-flex: 3;
+            flex: 3;
+}
+.flex-4{
+	-webkit-flex: 4;
+            flex: 4;
+}
+.box{
+	background:#00d7e6;
+    border-left:4px solid #1e91c6;
+    border-right:4px solid #1e91c6;
+    position:relative;
+    padding:5px;
+    &:after, &:before{
+    	content: '';
+    	width: 100%;
+    	height: 4px;
+    	background: #1e91c6;
+    	border-left: 4px solid transparent;
+    	border-right: 4px solid transparent;
+    	box-sizing:border-box;
+    	position: absolute;
+    	left: 0;
+    }
+    &:before{
+    	top:-4px;
+    }
+    &:after{
+    	bottom: -4px;
+    }
+    &.inside-box{
+    	background: #77ffcd;
+    	border-left:4px solid #025c39;
+    	margin-right: 5px;
+    	margin-top: 5px;
+    	margin-bottom: 5px;
+    	border-right:4px solid #025c39;
+    	&:after, &:before{
+    		background: #025c39;
+    	}
+    }
+}
+
+// .border{
+// 	flex:initial;
+// 	-webkit-flex:initial;
+// 	width: 4px;
+// 	background:#1e91c6;
+// 	height: 92px;
+// 	margin-top: 4px;
+// }
+// .box-content{
+// 	background:#00d7e6;
+// 	-webkit-flex: 1;
+//           flex: 1;
+//     border-top:4px solid #1e91c6;
+//     border-bottom:4px solid #1e91c6;
+// }
+
 
 

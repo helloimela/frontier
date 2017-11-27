@@ -1,16 +1,37 @@
-<div class="rows">
-	<div class="col-xs-6">Species profile</div>
-	<div class="col-xs-6">
+<div class="box-container flex-container">
+	<div class="box flex-container flex-1">
+		<div class="box flex-2 inside-box">a profile picture</div>
+		<div class="box flex-4 inside-box">
+			<ul>
+				<li>Class: {{itemDetail.class}}</li>
+				<li>Type: {{itemDetail.type}}</li>
+				<li>Habitat: {{itemDetail.habitat}}</li>
+			</ul>
+		</div>
+		<div class="flex-1">something else</div>
+	</div>
+</div>
+<div class="box-container flex-container">
+	<div class="box flex-container flex-0">
+		<div class="box flex-3 inside-box">motion</div>
+		<div class="flex-1">nav</div>
+	</div>
+		
+</div>
+
+<!-- <div class="box-container">
+	<div class="border"></div>
+	<div class="box-content">
 		<ul>
 			<li>Class: {{itemDetail.class}}</li>
 			<li>Type: {{itemDetail.type}}</li>
 			<li>Habitat: {{itemDetail.habitat}}</li>
 		</ul>
+		<p>Species: {{itemDetail.name}}</p>
 	</div>
-	<div class="col-sm-12">Species: {{itemDetail.name}}</div>
-	<div class="col-sm-12">
-		<form ng-submit="sendReady()">
-			<button type="submit" class="btn btn-primary">Ready to Play?</button>
-		</form>
-	</div>
+	<div class="border"></div>
 </div>
+
+<form ng-submit="sendReady()">
+	<button type="submit" class="btn btn-primary">Ready to Play?</button>
+</form> -->

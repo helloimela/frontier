@@ -1156,7 +1156,7 @@ body {
   font-size: 14px;
   line-height: 1.42857;
   color: #333333;
-  background-color: #fff;
+  background-color: #000;
 }
 
 input,
@@ -1203,7 +1203,7 @@ img {
 .img-thumbnail {
   padding: 4px;
   line-height: 1.42857;
-  background-color: #fff;
+  background-color: #000;
   border: 1px solid #ddd;
   border-radius: 4px;
   -webkit-transition: all 0.2s ease-in-out;
@@ -2598,7 +2598,7 @@ th {
   border-top: 2px solid #ddd;
 }
 .table .table {
-  background-color: #fff;
+  background-color: #000;
 }
 
 .table-condensed > thead > tr > th,
@@ -4082,7 +4082,7 @@ tbody.collapse.in {
 }
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
   color: #555555;
-  background-color: #fff;
+  background-color: #000;
   border: 1px solid #ddd;
   border-bottom-color: transparent;
   cursor: default;
@@ -4158,7 +4158,7 @@ tbody.collapse.in {
   .nav-tabs.nav-justified > .active > a:hover,
   .nav-tabs-justified > .active > a:focus,
   .nav-tabs.nav-justified > .active > a:focus {
-    border-bottom-color: #fff;
+    border-bottom-color: #000;
   }
 }
 
@@ -4954,7 +4954,7 @@ a.badge:hover, a.badge:focus {
   padding: 4px;
   margin-bottom: 20px;
   line-height: 1.42857;
-  background-color: #fff;
+  background-color: #000;
   border: 1px solid #ddd;
   border-radius: 4px;
   -webkit-transition: all 0.2s ease-in-out;
@@ -6600,8 +6600,12 @@ button.close {
 
 html, body, body > div, .container {
   height: 100%;
-  color: #333333;
+  color: #eeeeee;
   position: relative;
+}
+
+body {
+  background-color: #000;
 }
 
 @media (max-width: 768px) {
@@ -6615,4 +6619,108 @@ a {
 }
 a:hover {
   text-decoration: none;
+}
+
+.box-outside {
+  background: #00d7e6;
+  position: relative;
+}
+.box-outside .border {
+  position: absolute;
+  background: #1e91c6;
+}
+.box-outside .border.left, .box-outside .border.right {
+  top: 2%;
+  height: 96%;
+  width: 5px;
+}
+.box-outside .border.left {
+  left: -5px;
+}
+.box-outside .border.right {
+  right: -5px;
+}
+.box-outside .border.top, .box-outside .border.bottom {
+  left: 1%;
+  width: 98%;
+  height: 5px;
+}
+.box-outside .border.top {
+  top: -5px;
+}
+.box-outside .border.bottom {
+  bottom: -5px;
+}
+
+.box-container {
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 11px;
+}
+
+.flex-container {
+  display: flex;
+  display: -webkit-flex;
+}
+
+.flex-0 {
+  -webkit-flex: 0 0 auto;
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+.flex-1 {
+  -webkit-flex: 1;
+  flex: 1;
+}
+
+.flex-2 {
+  -webkit-flex: 2;
+  flex: 2;
+}
+
+.flex-3 {
+  -webkit-flex: 3;
+  flex: 3;
+}
+
+.flex-4 {
+  -webkit-flex: 4;
+  flex: 4;
+}
+
+.box {
+  background: #00d7e6;
+  border-left: 4px solid #1e91c6;
+  border-right: 4px solid #1e91c6;
+  position: relative;
+  padding: 5px;
+}
+.box:after, .box:before {
+  content: '';
+  width: 100%;
+  height: 4px;
+  background: #1e91c6;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+}
+.box:before {
+  top: -4px;
+}
+.box:after {
+  bottom: -4px;
+}
+.box.inside-box {
+  background: #77ffcd;
+  border-left: 4px solid #025c39;
+  margin-right: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-right: 4px solid #025c39;
+}
+.box.inside-box:after, .box.inside-box:before {
+  background: #025c39;
 }
