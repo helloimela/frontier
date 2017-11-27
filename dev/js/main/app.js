@@ -155,13 +155,21 @@ app.controller('SpeciesCtrl', ['Page','$routeParams','$http','$location','$scope
 }]);
 
 app.controller('MotionCtrl', ['Vote','Page','$rootScope','$routeParams','$http','$location','$scope',function(Vote,Page,$rootScope,$routeParams, $http, $location, $scope){
-  Page.setTitle('Start the Game');
+  Page.setTitle('Motions');
+
+  $http.get('js/main/motions.json').then(function(data){
+      $scope.itemDetail = data.data[1];
+      $scope.effects = data.data[1].effects;
+      console.log($scope.effects);
+  });
   $scope.submitMotion = function(){
     console.log($scope.influence);
   };
   $scope.$watch('influence',function(newVal, oldVal){
     if(newVal!==oldVal) Vote.setInfluence(newVal);
   });
+
+  $scope.count = 0;
 }]);
 
 app.directive('nav', ['$location',function($location){

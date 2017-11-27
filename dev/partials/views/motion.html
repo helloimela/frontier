@@ -1,4 +1,28 @@
+<ng-repeat
+<div class="col-xs-6 col-sm-3"><strong>Motion:</strong> 
+		<ul>
+			<li>Topic: {{itemDetail.topic}}</li>
+			<li>Type: {{itemDetail.type}}</li>
+		</ul>
+</div>
+<div class="col-xs-6 col-sm-3"><strong>Affects:</strong> 
+		<ul>
+			<li>Land: {{effects.land}}</li>
+			<li>Population: {{effects.population}}</li>
+			<li>Energy: {{effects.energy}}</li>
+			<li>Food: {{effects.food}}</li>
+		</ul>
+</div>
+<div class="col-xs-6 col-sm-3">
+	<strong>Influence Spent:</strong>
+	<br>
+	<button ng-click="count = count + 1">+</button>
+	<p>{{ count }}</p>
+	<button ng-click="count = count - 1">-</button>
+</div>
+<strong>Influence Required: {{effects.influence_required}}</strong>
+
 <form ng-submit="submitMotion()">
-	<input type="text" name="influence" ng-model="number">
+
 	<input type="submit" value="Send" />
 </form>
