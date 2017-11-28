@@ -29,12 +29,16 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
   });
 }]);*/
 
-app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location','$rootScope','$window','$firebase',function(Pubnub,Page,$sce,$http, $scope, $location, $rootScope, $window,$firebase){
+app.constant('FBURL', 
+  'https://frontier-a3fcb.firebaseio.com/'                                                   
+);
+
+app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location','$rootScope','$window','$firebaseArray',function(Pubnub,Page,$sce,$http, $scope, $location, $rootScope, $window,$firebaseArray){
   $scope.Page = Page;
 
-  // var ref = new Firebase("https://frontier-a3fcb.firebaseio.com");  
-  // var fb = $firebase(ref);
- 
+  // var ref = firebase.database().ref();
+  // $scope.itemDetail = $firebaseArray(ref);
+  // console.log($scope.itemDetail);
 
 	$scope.go = function ( path ) {
 	  $location.path( path );
@@ -105,7 +109,7 @@ app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location',
   $scope.goVote = function(){
     $scope.counter+=1;
     $location.path('/motion/'+$scope.counter);
-  }
+  };
 
 }]);
 
@@ -150,14 +154,26 @@ app.controller('NewplayerCtrl', ['Page','$timeout','$http','$location','$scope',
 
 }]);
 
-app.controller('SpeciesCtrl', ['Page','$routeParams','$http','$location','$scope',function(Page,$routeParams, $http, $location, $scope, $rootScope){
+app.controller('SpeciesCtrl', ['Pubnub','Page','$sce','$http','$scope','$location','$rootScope','$window','$firebaseArray','$routeParams',function(Pubnub,Page,$sce,$http, $scope, $location, $rootScope, $window,$firebaseArray,$routeParams){
+
   Page.setTitle('Species Overview');
 
-  $http.get('js/main/species.json').then(function(data){
-      $scope.totalnum=data.data.length;
-      // $scope.trueID=$scope.totalnum-$routeParams.speciesId-1;
-      $scope.itemDetail = data.data[$routeParams.speciesId];
-  });
+  var ref = firebase.database().ref('species').child($routeParams.speciesId);
+  var data = [];
+  // console.log(data);
+  $scope.itemDetail = $firebaseArray(ref);
+  console.log($scope.itemDetail);
+
+  ref.child($routeParams.speciesId).on("value",function(snapshots){ //value of that id
+    console.log(snapshots.val());
+    // $scope.itemDetail.class = snapshots.val();
+  })
+
+  // $http.get('js/main/species.json').then(function(data){
+  //     $scope.totalnum=data.data.length;
+  //     // $scope.trueID=$scope.totalnum-$routeParams.speciesId-1;
+  //     $scope.itemDetail = data.data[$routeParams.speciesId];
+  // });
 
 }]);
 

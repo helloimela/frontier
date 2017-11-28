@@ -1,33 +1,34 @@
-[
-	{
-		"id":0,
-		"name":"Space Ulk",
-		"class":"Amphibia",
-		"type":"Herbivore",
-		"habitat":"Sea",
-		"stats":[
-			{
-				"land":"",
-				"population":"",
-				"energy":"",
-				"food":"",
-				"influence":""
-			}
-		]
-	},{
-		"id":1,
-		"name":"Space Feline",
-		"class":"Mammals",
-		"type":"Carnivore",
-		"habitat":"Land",
-		"stats":[
-			{
-				"land":"",
-				"population":"",
-				"energy":"",
-				"food":"",
-				"influence":""
-			}
-		]
+{
+	"species" : {
+		"0" : {
+			"name":"Space Ulk",
+			"class":"Amphibia",
+			"type":"Herbivore",
+			"habitat":"Sea",
+			"stats":[
+				{
+					"land":"50",
+					"population":"40",
+					"energy":"30",
+					"food":"80",
+					"influence":"5"
+				}
+			]
+		},
+		"1" : {
+			"name":"Space Feline",
+			"class":"Mammals",
+			"type":"Carnivore",
+			"habitat":"Land",
+			"stats":[
+				{
+					"land":"60",
+					"population":"50",
+					"energy":"70",
+					"food":"40",
+					"influence":"5"
+				}
+			]
+		}
 	}
-]
+}
