@@ -9,7 +9,8 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
     .when("/1", {templateUrl: "partials/home1.html", controller: "HomeCtrl"})
     .when("/playernew/:playerId", {templateUrl: "partials/views/newplayer.html", controller: "NewplayerCtrl"})
     .when("/motion/:turnId", {templateUrl: "partials/views/motion.html", controller: "MotionCtrl"})
-    .when("/sharedScreen", {templateUrl: "partials/views/sharedScreen.html", controller: "MotionCtrl"})
+    .when("/sharedscreen", {templateUrl: "partials/views/sharedscreen.html", controller: "SharedCtrl"})
+    .when("/sharedmotion/:turnId", {templateUrl: "partials/views/sharedmotion.html", controller: "MotionCtrl"})
     .when("/species/:speciesId", {templateUrl: "partials/views/species.html", controller: "SpeciesCtrl"});
     // Pages
 
@@ -106,8 +107,18 @@ app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location',
   };
 
   $scope.counter = 0;
-  $scope.goVote = function(){
+  $scope.goVote = function(){ 
     $scope.counter+=1;
+    Pubnub.publish({
+          channel: $scope.channel,
+          message: {
+              turnId: $scope.counter,
+              sender_uuid: $scope.uuid
+          },
+          callback: function(m) {
+            // console.log(m);
+          }
+      });
     $location.path('/motion/'+$scope.counter);
   };
 
@@ -177,7 +188,16 @@ app.controller('SpeciesCtrl', ['Pubnub','Page','$sce','$http','$scope','$locatio
 
 }]);
 
-app.controller('MotionCtrl', ['Vote','Page','$rootScope','$routeParams','$http','$location','$scope',function(Vote,Page,$rootScope,$routeParams, $http, $location, $scope){
+app.controller('SharedCtrl', ['Page','$http','$location','$scope','$routeParams','$rootScope','Pubnub',function(Page,$http, $location, $scope,$routeParams,$rootScope, Pubnub){
+  Page.setTitle('Start');
+
+  $scope.start = function (path){
+    console.log('Start');
+    $location.path(path);
+  };
+}]);
+
+app.controller('MotionCtrl', ['Vote','Page','$rootScope','$routeParams','$http','$location','$scope','Pubnub',function(Vote,Page,$rootScope,$routeParams, $http, $location, $scope,Pubnub){
   Page.setTitle('Motions');
 
   if($routeParams.turnId==1){
@@ -206,7 +226,20 @@ app.controller('MotionCtrl', ['Vote','Page','$rootScope','$routeParams','$http',
        
   });
   $scope.submitMotion = function(){
-    console.log($scope.influence);
+    //console.log($scope.influence);
+    Pubnub.publish({
+          channel: $scope.channel,
+          message: {
+              motionId: $scope.itemDetail,
+              influence: $scope.count,
+              motionId2: $scope.itemDetail2,
+              influence2: $scope.count2,
+              sender_uuid: $scope.uuid
+          },
+          callback: function(m) {
+            //console.log(m);
+          }
+      });
   };
   $scope.$watch('influence',function(newVal, oldVal){
     if(newVal!==oldVal) Vote.setInfluence(newVal);
