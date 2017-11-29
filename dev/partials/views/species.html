@@ -3,7 +3,7 @@
 		<div class="box flex-2 inside-box">a profile picture</div>
 		<div class="box flex-3 inside-box">
 			<ul>
-				<li>Class: {{itemDetail[0].$value}}</li>
+				<li>Class: {{itemDetail.class}}</li>
 				<li>Type: {{itemDetail.type}}</li>
 				<li>Habitat: {{itemDetail.habitat}}</li>
 			</ul>
@@ -12,27 +12,27 @@
 	</div>
 </div>
 <div class="box-container flex-container">
-	<div class="box col-100">
+	<div class="box col-100" ng-repeat="stat in itemDetail.stats">
 		<div class="flex-container flex-0 influence-box">
 			<div class="flex-2"></div>
-			<div class="box flex-3 inside-box">Influence</div>
+			<div class="box flex-3 inside-box">Influence: {{stat.influence}}</div>
 			<div class="flex-1"></div>
 		</div>	
 
 		<div class="flex-container flex-0 prop-box">
-			<div class="box flex-5 inside-box inside-no-corner">Land Usage</div>
+			<div class="box flex-5 inside-box inside-no-corner">Land Usage: {{stat.land}}</div>
 			<div class="flex-1">nav</div>
 		</div>
 		<div class="flex-container flex-0 prop-box">
-			<div class="box flex-5 inside-box inside-no-corner">Population</div>
+			<div class="box flex-5 inside-box inside-no-corner">Population: {{stat.population}}</div>
 			<div class="flex-1">nav</div>
 		</div>
 		<div class="flex-container flex-0 prop-box">
-			<div class="box flex-5 inside-box inside-no-corner">Energy</div>
+			<div class="box flex-5 inside-box inside-no-corner">Energy: {{stat.energy}}</div>
 			<div class="flex-1">nav</div>
 		</div>
 		<div class="flex-container flex-0 prop-box">
-			<div class="box flex-5 inside-box inside-no-corner">Food</div>
+			<div class="box flex-5 inside-box inside-no-corner">Food: {{stat.food}}</div>
 			<div class="flex-1">nav</div>
 		</div>
 	</div>

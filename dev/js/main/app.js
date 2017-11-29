@@ -30,10 +30,6 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
   });
 }]);*/
 
-app.constant('FBURL', 
-  'https://frontier-a3fcb.firebaseio.com/'                                                   
-);
-
 app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location','$rootScope','$window','$firebaseArray',function(Pubnub,Page,$sce,$http, $scope, $location, $rootScope, $window,$firebaseArray){
   $scope.Page = Page;
 
@@ -169,22 +165,19 @@ app.controller('SpeciesCtrl', ['Pubnub','Page','$sce','$http','$scope','$locatio
 
   Page.setTitle('Species Overview');
 
-  var ref = firebase.database().ref('species').child($routeParams.speciesId);
-  var data = [];
-  // console.log(data);
-  $scope.itemDetail = $firebaseArray(ref);
-  console.log($scope.itemDetail);
+  var ref = firebase.database().ref('species');
+  var data= $firebaseArray(ref);
 
-  ref.child($routeParams.speciesId).on("value",function(snapshots){ //value of that id
-    console.log(snapshots.val());
-    // $scope.itemDetail.class = snapshots.val();
-  })
+  data.$loaded().then(function() {
+      $scope.itemDetail = data[$routeParams.speciesId];
+      // To iterate the key/value pairs of the object, use angular.forEach()
+      // angular.forEach(data, function(value, key) {
+      //   // console.log(key, value);
+      // });
+     });
 
-  // $http.get('js/main/species.json').then(function(data){
-  //     $scope.totalnum=data.data.length;
-  //     // $scope.trueID=$scope.totalnum-$routeParams.speciesId-1;
-  //     $scope.itemDetail = data.data[$routeParams.speciesId];
-  // });
+  // For three-way data bindings, bind it to the scope instead
+  // data.$bindTo($scope, "itemDetail");
 
 }]);
 
