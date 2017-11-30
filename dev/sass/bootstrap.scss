@@ -84,6 +84,10 @@ a{
 	cursor: pointer;
 	&:hover{text-decoration: none;}
 }
+
+form{
+	input[type="text"]{color: #000;}
+}
 .page-title{
 	font-size: 1.2em;
 	background: $brand-bg;

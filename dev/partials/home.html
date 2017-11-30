@@ -1,7 +1,14 @@
 <!-- <h5>Start the game?</h5> -->
 <!-- <a href="" ng-click="" class="btn btn-success">Start The Game</a> -->
 <!-- <a href="" class="btn btn-success">No</a> -->
-<a href="" ng-click="go('/playernew/0')" class="btn btn-success">Start The Game</a>
+<div ng-controller="joinGameCtrl">
+	<form ng-submit="joinGame()">
+		<input ng-model="joinGameID" type="text" name="joinGameID" placeholder="Type the game ID" />
+		<button type="submit" class="btn btn-success">Join game</button>
+		<!-- <p>{{joinGameID}}</p> -->
+	</form>
+</div>
+
 
 <!-- <div ng-controller="ChatCtrl">
 	<form ng-submit="sendMessage()">

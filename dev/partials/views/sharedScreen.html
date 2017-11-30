@@ -1,7 +1,26 @@
-<div class="rows">
+<!-- <div class="rows">
 	<div class="col-sm-12">
 		<p ng-if="presences.occupancy>0">{{presences.occupancy}} players:</p>
 		<a href="" ng-click="start('sharedmotion/1')" class="btn btn-success">Start!</a>
+		
+		<ul>
+			<li ng-repeat="message in messages">
+			  <span class="title">Player #{{ message.sender_uuid }} joined!</span>
+			  <p>Species : {{message.speciesId}}</p>
+			</li>
+		</ul>
+	</div>
+</div> -->
+
+
+<div class="rows">
+	<div class="col-sm-12"><a href="" ng-click="startGame()" class="btn btn-success" ng-hide="hideStartGame">Start!</a></div>
+	<div class="col-sm-12" ng-show="hideStartGame">
+		<p>Game ID: {{gameID}}</p>
+		<p>Enter the game ID on your phone</p>
+	</div>
+	<div class="col-sm-12">
+		<p ng-if="presences.occupancy>0">{{presences.occupancy}} players:</p>
 		<ul>
 			<li ng-repeat="message in messages">
 			  <span class="title">Player #{{ message.sender_uuid }} joined!</span>

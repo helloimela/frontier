@@ -9,7 +9,7 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
     .when("/1", {templateUrl: "partials/home1.html", controller: "HomeCtrl"})
     .when("/playernew/:playerId", {templateUrl: "partials/views/newplayer.html", controller: "NewplayerCtrl"})
     .when("/motion/:turnId", {templateUrl: "partials/views/motion.html", controller: "MotionCtrl"})
-    .when("/sharedscreen", {templateUrl: "partials/views/sharedscreen.html", controller: "SharedCtrl"})
+    .when("/sharedscreen", {templateUrl: "partials/views/sharedScreen.html", controller: "SharedCtrl"})
     .when("/sharedmotion/:turnId", {templateUrl: "partials/views/sharedmotion.html", controller: "MotionCtrl"})
     .when("/species/:speciesId", {templateUrl: "partials/views/species.html", controller: "SpeciesCtrl"});
     // Pages
@@ -33,17 +33,13 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
 app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location','$rootScope','$window','$firebaseArray',function(Pubnub,Page,$sce,$http, $scope, $location, $rootScope, $window,$firebaseArray){
   $scope.Page = Page;
 
-  // var ref = firebase.database().ref();
-  // $scope.itemDetail = $firebaseArray(ref);
-  // console.log($scope.itemDetail);
-
 	$scope.go = function ( path ) {
 	  $location.path( path );
 	};
+
   $rootScope.messages = [];
   $rootScope.presences=[];
 
-  $scope.channel = 'game-channel';
   $scope.uuid = Math.random(100).toString();
   Pubnub.init({
    publish_key: 'pub-c-445d8ace-41a9-40d2-b68c-bdfcc1e2a298',
@@ -51,15 +47,26 @@ app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location',
    uuid: $scope.uuid
   });
 
+  $scope.startGame = function(){
+    $scope.gameID = Math.floor(Math.random() * 9999) + 1000 
+    $scope.channel = $scope.gameID;
+    firebase.database().ref('gameChannel').child('game-' + $scope.gameID).set({
+      id : $scope.gameID
+    });
+    $scope.hideStartGame = true;
+    Pubnub.subscribe({
+        channel: $scope.channel,
+        triggerEvents: ['callback'],
+        presence:function(m){
+          // console.log(m);
+          $rootScope.presences=m;
+        }
+    });
+  };
+  
+
   // Subscribing to the ‘messages-channel’ and trigering the message callback
-  Pubnub.subscribe({
-      channel: $scope.channel,
-      triggerEvents: ['callback'],
-      presence:function(m){
-        // console.log(m);
-        $rootScope.presences=m;
-      }
-  });
+
 
   $scope.sendMessage =  function(){
     $scope.publish(0);
@@ -102,6 +109,19 @@ app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location',
       });
   };
 
+  $scope.slicedUUID = $scope.uuid.slice(2);
+
+  // 
+  // $scope.startGame = function(){
+    // // random species id here, 
+    // firebase.database().ref('players').child('player-' + $scope.slicedUUID).set({
+    //     uuid: $scope.uuid,
+    //     species: {}
+    // });
+    // // go to random species ID
+    // $scope.go('/playernew/0');
+  // };
+
   $scope.counter = 0;
   $scope.goVote = function(){ 
     $scope.counter+=1;
@@ -142,6 +162,44 @@ app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location',
 //   // };
 // }]);
 
+app.controller('joinGameCtrl',['$scope','Pubnub','$rootScope',function($scope,Pubnub,$rootScope){
+  $scope.joinGameID="";
+  $scope.joinGame = function(){
+    console.log($scope.joinGameID);
+    Pubnub.subscribe({
+        channel: $scope.joinGameID,
+        triggerEvents: ['callback'],
+        presence:function(m){
+          // console.log(m);
+          $rootScope.presences=m;
+        }
+    });
+
+    $scope.uuid = Math.random(100).toString();
+
+    $scope.publish = function(n){
+      Pubnub.publish({
+            channel: $scope.joinGameID,
+            message: {
+                readyState:n,
+                sender_uuid: $scope.uuid
+            },
+            callback: function(m) {
+              $rootScope.messages = m;
+              console.log($rootScope.messages);
+            }
+        });
+    };
+
+    $scope.publish(0);
+    console.log('SendMessage');
+    console.log($rootScope.messages);
+    // $location.path('/species/'+$scope.userID);
+
+  };
+  // endof function join Game
+}]);
+
 app.controller('HomeCtrl', ['Page','$http','$location','$scope','$rootScope',function(Page,$http, $location, $scope, $rootScope){
   Page.setTitle('Frontier - A Planet of a Thousand Footprints');
 }]);
@@ -167,9 +225,22 @@ app.controller('SpeciesCtrl', ['Pubnub','Page','$sce','$http','$scope','$locatio
 
   var ref = firebase.database().ref('species');
   var data= $firebaseArray(ref);
+  var dataisi = {};
 
   data.$loaded().then(function() {
       $scope.itemDetail = data[$routeParams.speciesId];
+      dataisi = data[$routeParams.speciesId];
+      firebase.database().ref('players').child('player-' + $scope.slicedUUID).update({
+         'species/class' : dataisi.class,
+         'species/habitat' : dataisi.habitat,
+         'species/name' : dataisi.name,
+         'species/type' : dataisi.type,
+         'species/stats/energy' : dataisi.stats.energy,
+         'species/stats/food' : dataisi.stats.food,
+         'species/stats/influence' : dataisi.stats.influence,
+         'species/stats/land' : dataisi.stats.land,
+         'species/stats/population' : dataisi.stats.population
+      });
       // To iterate the key/value pairs of the object, use angular.forEach()
       // angular.forEach(data, function(value, key) {
       //   // console.log(key, value);
