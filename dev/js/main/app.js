@@ -28,8 +28,7 @@ app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location',
 	};
 
   $rootScope.messages = [];
-  $rootScope.presences=[];
-  $scope.presences2 = [];
+  $rootScope.presences = [];
 
   $scope.uuid = Math.random(100).toString();
   Pubnub.init({
@@ -62,7 +61,7 @@ app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location',
   };
 
   $scope.startGame = function(){
-    $scope.gameID = Math.floor(Math.random() * 9999) + 1000;
+    $scope.gameID = Math.floor(Math.random() * 9999) + 1000; 
     $scope.channel = $scope.gameID;
     firebase.database().ref('gameChannel').child('game-' + $scope.gameID).set({
       id : $scope.gameID
@@ -79,9 +78,15 @@ app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location',
     Pubnub.subscribe({
         channel : gameid,
         triggerEvents: ['callback'],
-        presence:function(m){
+        presence: function(presenceEvent){
+          console.log(presenceEvent.action); // online status events
+          console.log(presenceEvent.timestamp); // timestamp on the event is occurred
+          console.log(presenceEvent.uuid); // uuid of the user
+          console.log(presenceEvent.occupancy); // current number of users online
           // console.log(m);
-          data.push(m);
+          $rootScope.presences=presenceEvent;
+          $rootScope.$apply();
+          console.log($rootScope.presences);  
         }
     });
     console.log(data);
