@@ -20,7 +20,7 @@
 		<p>Enter the game ID on your phone</p>
 	</div>
 	<div class="col-sm-12">
-		<p ng-if="presences.occupancy>0">{{presences.occupancy}} players:</p>
+		<p ng-if="presences.occupancy>0">{{presences.occupancy}} players online</p>
 		<ul>
 			<li ng-repeat="message in messages">
 			  <span class="title">Player #{{ message.sender_uuid }} joined!</span>
