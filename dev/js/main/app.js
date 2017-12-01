@@ -20,16 +20,6 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
     });
 }]);
 
-/*app.run(['Pubnub', '$rootScope',function (Pubnub, $rootScope) {
-  $rootScope.channel = 'game-channel';
-  $rootScope.uuid = Math.random(100).toString();
-  Pubnub.init({
-      subscribe_key: 'sub-c-33a57daa-c3a7-11e7-b683-b67c7dbcdd00',
-      publish_key: 'pub-c-445d8ace-41a9-40d2-b68c-bdfcc1e2a298',
-      uuid: $rootScope.uuid
-  });
-}]);*/
-
 app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location','$rootScope','$window','$firebaseArray',function(Pubnub,Page,$sce,$http, $scope, $location, $rootScope, $window,$firebaseArray){
   $scope.Page = Page;
 
@@ -39,6 +29,7 @@ app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location',
 
   $rootScope.messages = [];
   $rootScope.presences=[];
+  $scope.presences2 = [];
 
   $scope.uuid = Math.random(100).toString();
   Pubnub.init({
@@ -47,156 +38,101 @@ app.controller('MainCtrl', ['Pubnub','Page','$sce','$http','$scope','$location',
    uuid: $scope.uuid
   });
 
+  $scope.publish = function(n,channel){
+    var adata=[];
+    Pubnub.publish({
+        channel: channel,
+        message: {
+            readyState:n,
+            sender_uuid: $scope.uuid
+        },
+        callback: function(m) {
+          $rootScope.messages.push(m);
+          adata.push(m);
+          $rootScope.$apply();
+          // console.log($rootScope.messages);
+        }
+    });
+    return adata;
+  };
+
+  $scope.nn = {
+    'state':'1',
+    'number':'10'
+  };
+
   $scope.startGame = function(){
-    $scope.gameID = Math.floor(Math.random() * 9999) + 1000 
+    $scope.gameID = Math.floor(Math.random() * 9999) + 1000;
     $scope.channel = $scope.gameID;
     firebase.database().ref('gameChannel').child('game-' + $scope.gameID).set({
       id : $scope.gameID
     });
     $scope.hideStartGame = true;
+    $scope.subscribePN($scope.gameID); 
+    // $rootScope.messages.push($scope.nn);
+    $rootScope.messages.push($scope.publish(1,$scope.channel));
+    console.log($scope.publish(1,$scope.channel));
+  };
+
+  $scope.subscribePN = function(gameid){
+    var data=[];
     Pubnub.subscribe({
-        channel: $scope.channel,
+        channel : gameid,
         triggerEvents: ['callback'],
         presence:function(m){
           // console.log(m);
-          $rootScope.presences=m;
+          data.push(m);
         }
     });
-  };
-  
-
-  // Subscribing to the ‘messages-channel’ and trigering the message callback
-
-
-  $scope.sendMessage =  function(){
-    $scope.publish(0);
-    console.log('SendMessage');
-    console.log($rootScope.messages);
-    $location.path('/species/'+$scope.userID);
-  };
-
-  $scope.$on(Pubnub.getPresenceEventNameFor($scope.channel),function(e,payload){
-    // console.log(e);   
-    // console.log(payload);   
-  });
-
-  // Listening to the callbacks
-  $scope.$on(Pubnub.getMessageEventNameFor($scope.channel), function (ngEvent, m) {
-      $scope.$apply(function () {
-          $rootScope.messages.push(m);
-          // console.log(ngEvent);
-          // console.log(m);
-      });
-  });
-
-  $scope.sendReady = function(){
-    $scope.publish(1);
-    console.log('SendReady');
-    console.log($rootScope.messages);
-  };
-
-  $scope.publish = function(n){
-    Pubnub.publish({
-          channel: $scope.channel,
-          message: {
-              speciesId:$rootScope.userID,
-              readyState:n,
-              sender_uuid: $scope.uuid
-          },
-          callback: function(m) {
-            // console.log(m);
-          }
-      });
-  };
-
-  $scope.slicedUUID = $scope.uuid.slice(2);
-
-  // 
-  // $scope.startGame = function(){
-    // // random species id here, 
-    // firebase.database().ref('players').child('player-' + $scope.slicedUUID).set({
-    //     uuid: $scope.uuid,
-    //     species: {}
-    // });
-    // // go to random species ID
-    // $scope.go('/playernew/0');
-  // };
-
-  $scope.counter = 0;
-  $scope.goVote = function(){ 
-    $scope.counter+=1;
-    Pubnub.publish({
-          channel: $scope.channel,
-          message: {
-              turnId: $scope.counter,
-              sender_uuid: $scope.uuid
-          },
-          callback: function(m) {
-            // console.log(m);
-          }
-      });
-    $location.path('/motion/'+$scope.counter);
+    console.log(data);
   };
 
 }]);
 
 
-// app.controller('SubscribeCtrl', ['Pubnub','Page','$http','$location','$scope','$rootScope',function(Pubnub,Page,$http, $location, $scope, $rootScope){
- 
-//      // Send the messages over PubNub Network
-//   // $scope.sendMessage = function() {
-//   //     Pubnub.publish({
-//   //         channel: $scope.channel,
-//   //         message: {
-//   //             // content: $scope.messageContent,
-//   //             sender_uuid: $scope.uuid,
-//   //             date: new Date()
-//   //         },
-//   //         callback: function(m) {
-//   //           console.log(m);
-//   //         }
-//   //     });
-//       // Reset the messageContent input
-//       // $scope.messageContent = '';
-
-//   // };
-// }]);
 
 app.controller('joinGameCtrl',['$scope','Pubnub','$rootScope',function($scope,Pubnub,$rootScope){
   $scope.joinGameID="";
-  $scope.joinGame = function(){
+  
+  $scope.publish = function(n,uuid){
     console.log($scope.joinGameID);
+    Pubnub.publish({
+        channel: $scope.joinGameID,
+        message: {
+            readyState:n,
+            sender_uuid: uuid
+        },
+        callback: function(m) {
+          $rootScope.messages.push(m);
+          $rootScope.$apply();
+          // console.log($rootScope.messages);
+        }
+    });
+  };
+
+  $scope.joinGame = function(){
+    $rootScope.test = 'hello world';
     Pubnub.subscribe({
         channel: $scope.joinGameID,
         triggerEvents: ['callback'],
         presence:function(m){
-          // console.log(m);
-          $rootScope.presences=m;
+          $scope.sendData(m);
         }
     });
 
     $scope.uuid = Math.random(100).toString();
-
-    $scope.publish = function(n){
-      Pubnub.publish({
-            channel: $scope.joinGameID,
-            message: {
-                readyState:n,
-                sender_uuid: $scope.uuid
-            },
-            callback: function(m) {
-              $rootScope.messages = m;
-              console.log($rootScope.messages);
-            }
-        });
-    };
-
-    $scope.publish(0);
-    console.log('SendMessage');
-    console.log($rootScope.messages);
+    $scope.publish(0,$scope.uuid);
+    // console.log($rootScope.messages);
     // $location.path('/species/'+$scope.userID);
 
   };
+
+  $scope.sendData = function(m){
+    $rootScope.messages = m;
+    console.log('message in sendData');
+    console.log($rootScope.messages);
+  };
+
   // endof function join Game
 }]);
 
@@ -259,6 +195,7 @@ app.controller('SharedCtrl', ['Page','$http','$location','$scope','$routeParams'
     console.log('Start');
     $location.path(path);
   };
+
 }]);
 
 app.controller('MotionCtrl', ['Vote','Page','$rootScope','$routeParams','$http','$location','$scope','Pubnub',function(Vote,Page,$rootScope,$routeParams, $http, $location, $scope,Pubnub){

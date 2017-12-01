@@ -20,11 +20,14 @@
 		<p>Enter the game ID on your phone</p>
 	</div>
 	<div class="col-sm-12">
+		<h5>Player State</h5>
+		<p>{{messages}}</p>
+		<p>{{presences}}</p>
 		<p ng-if="presences.occupancy>0">{{presences.occupancy}} players:</p>
 		<ul>
 			<li ng-repeat="message in messages">
+				<p>{{message}}</p>
 			  <span class="title">Player #{{ message.sender_uuid }} joined!</span>
-			  <p>Species : {{message.speciesId}}</p>
 			</li>
 		</ul>
 	</div>
